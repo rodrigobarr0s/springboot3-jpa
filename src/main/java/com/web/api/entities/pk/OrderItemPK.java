@@ -1,5 +1,6 @@
 package com.web.api.entities.pk;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import com.web.api.entities.Order;
@@ -10,7 +11,9 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Embeddable
-public class OrdemItemPK {
+public class OrderItemPK implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	@ManyToOne
 	@JoinColumn(name = "order_id")
@@ -20,10 +23,10 @@ public class OrdemItemPK {
 	@JoinColumn(name = "product_id")
 	private Product product;
 
-	public OrdemItemPK() {
+	public OrderItemPK() {
 	}
 
-	public OrdemItemPK(Order order, Product product) {
+	public OrderItemPK(Order order, Product product) {
 		this.order = order;
 		this.product = product;
 	}
@@ -57,7 +60,7 @@ public class OrdemItemPK {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		OrdemItemPK other = (OrdemItemPK) obj;
+		OrderItemPK other = (OrderItemPK) obj;
 		return Objects.equals(order, other.order) && Objects.equals(product, other.product);
 	}
 
