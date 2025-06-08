@@ -1,7 +1,6 @@
 package com.web.api.services;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +11,8 @@ import com.web.api.entities.User;
 import com.web.api.repositories.UserRepository;
 import com.web.api.services.exceptions.DatabaseException;
 import com.web.api.services.exceptions.ResourceNotFoundException;
+
+import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class UserService {
@@ -33,11 +34,11 @@ public class UserService {
 	}
 
 	public void delete(Long id) {
-		try {
-			Optional<User> obj = userRepository.findById(id);
-			userRepository.delete(obj.get());
-		} catch (NoSuchElementException e) {
+		if (!userRepository.existsById(id)) {
 			throw new ResourceNotFoundException(id);
+		}
+		try {
+			userRepository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
 			throw new DatabaseException(e.getMessage());
 		}
